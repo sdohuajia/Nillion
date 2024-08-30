@@ -56,7 +56,6 @@ function main_menu() {
     done
 }
 
-
 # 安装节点函数
 function install_node() {
     # 检查是否有 Docker 已安装
