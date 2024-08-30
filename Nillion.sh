@@ -190,9 +190,6 @@ function query_logs() {
     # 查看 Docker 容器日志
     echo "正在查询 Docker 容器日志..."
     docker logs -f nillion_verifier --tail 100
-    
-    # 等待用户按任意键返回主菜单
-    read -p "按任意键返回主菜单..."
 }
 
 
