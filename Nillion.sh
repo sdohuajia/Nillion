@@ -24,9 +24,10 @@ function main_menu() {
         echo "2) 查询日志"
         echo "3) 删除节点"
         echo "4) 重启节点（与更换rpc通用）"
-        echo "5) 退出"
+        echo "5) 查看 public_key 和 account_id"
+        echo "6) 退出"
 
-        read -p "请输入选项 (1, 2, 3, 4, 5): " choice
+        read -p "请输入选项 (1, 2, 3, 4, 5, 6): " choice
 
         case $choice in
             1)
@@ -42,15 +43,19 @@ function main_menu() {
                 change_rpc
                 ;;
             5)
+                view_credentials
+                ;;
+            6)
                 echo "退出脚本。"
                 exit 0
                 ;;
             *)
-                echo "无效选项，请输入 1、2、3、4 或 5。"
+                echo "无效选项，请输入 1、2、3、4、5 或 6。"
                 ;;
         esac
     done
 }
+
 
 # 安装节点函数
 function install_node() {
@@ -231,6 +236,27 @@ function change_rpc() {
     docker run -d --name nillion_verifier -v ~/nillion/accuser:/var/tmp nillion/retailtoken-accuser:v1.0.0 accuse --rpc-endpoint "$new_rpc_url" --block-start "$start_block"
 
     echo "节点已更新到新的 RPC。"
+}
+
+# 查看 credentials.json 文件中的信息
+function view_credentials() {
+    # 检查 credentials.json 文件是否存在
+    credentials_file="$HOME/nillion/accuser/credentials.json"
+    if [ -f "$credentials_file" ]; then
+        echo "正在读取 credentials.json 文件中的内容..."
+        
+        # 使用 jq 提取并显示 public_key 和 account_id
+        public_key=$(jq -r '.public_key' "$credentials_file")
+        account_id=$(jq -r '.account_id' "$credentials_file")
+
+        echo "public_key: $public_key"
+        echo "account_id: $account_id"
+    else
+        echo "未找到 credentials.json 文件。请确保节点已正确安装并初始化。"
+    fi
+
+    # 等待用户按任意键以返回主菜单
+    read -p "按任意键返回主菜单..."
 }
 
 # 启动主菜单
