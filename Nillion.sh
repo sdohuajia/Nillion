@@ -237,26 +237,24 @@ function change_rpc() {
     echo "节点已更新到新的 RPC。"
 }
 
-# 查看 account_id 和 public_key 文件中的信息
+# 查看 credentials.json 文件中的信息
 function view_credentials() {
-    # 定义文件路径
-    account_id_file="$HOME/nillion/accuser/account_id"
-    public_key_file="$HOME/nillion/accuser/public_key"
+    # 定义 JSON 文件路径
+    credentials_file="$HOME/nillion/accuser/credentials.json"
 
-    echo "正在读取文件内容..."
+    echo "正在读取 credentials.json 文件中的内容..."
 
-    # 检查文件是否存在并显示内容
-    if [ -f "$account_id_file" ] && [ -f "$public_key_file" ]; then
-        echo "account_id 和 public_key 文件内容："
-        echo "============================="
-        echo "account_id:"
-        cat "$account_id_file"
+    # 确保文件存在
+    if [ -f "$credentials_file" ]; then
+        # 提取并显示 pub_key 和 address
+        echo "address:"
+        jq -r '.address // "未找到 address"' "$credentials_file"
         echo
-        echo "public_key:"
-        cat "$public_key_file"
+        echo "pub_key:"
+        jq -r '.pub_key // "未找到 public_key"' "$credentials_file"
         echo
     else
-        echo "未找到必要的文件。请确保节点已正确安装并初始化。"
+        echo "未找到 credentials.json 文件。请确保节点已正确安装并初始化。"
     fi
 
     # 等待用户按任意键以返回主菜单
