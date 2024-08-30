@@ -1,5 +1,14 @@
 #!/bin/bash
 
+# 脚本保存路径
+SCRIPT_PATH="$HOME/Nillion.sh"
+
+# 确保脚本以 root 权限运行
+if [ "$(id -u)" -ne "0" ]; then
+  echo "请以 root 用户或使用 sudo 运行此脚本"
+  exit 1
+fi
+
 # 主菜单函数
 function main_menu() {
     while true; do
