@@ -245,8 +245,8 @@ function view_credentials() {
         echo "正在读取 credentials.json 文件中的内容..."
         
         # 使用 jq 提取并显示 public_key 和 account_id
-        public_key=$(jq -r '.public_key' "$credentials_file")
-        account_id=$(jq -r '.account_id' "$credentials_file")
+        public_key=$(jq -r '.public_key // "未找到 public_key"' "$credentials_file")
+        account_id=$(jq -r '.account_id // "未找到 account_id"' "$credentials_file")
 
         echo "public_key: $public_key"
         echo "account_id: $account_id"
