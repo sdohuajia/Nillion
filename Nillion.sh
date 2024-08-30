@@ -242,8 +242,14 @@ function view_credentials() {
     # 检查 credentials.json 文件是否存在
     credentials_file="$HOME/nillion/accuser/credentials.json"
     if [ -f "$credentials_file" ]; then
+        echo "正在检查和调整文件权限..."
+
+        # 确保文件具有适当的权限
+        # 读写权限设置为用户，读取权限设置为其他用户
+        chmod 644 "$credentials_file"
+
         echo "正在读取 credentials.json 文件中的内容..."
-        
+
         # 使用 jq 提取并显示 public_key 和 account_id
         public_key=$(jq -r '.public_key // "未找到 public_key"' "$credentials_file")
         account_id=$(jq -r '.account_id // "未找到 account_id"' "$credentials_file")
