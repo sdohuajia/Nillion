@@ -189,7 +189,7 @@ function install_node() {
 function query_logs() {
     # 查看 Docker 容器日志
     echo "正在查询 Docker 容器日志..."
-    docker logs -f nillion_verifier --tail 100
+    docker logs -f nillion_verifier
 }
 
 # 删除节点函数
