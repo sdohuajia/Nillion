@@ -23,7 +23,7 @@ function main_menu() {
         echo "1) 安装节点"
         echo "2) 查询日志"
         echo "3) 删除节点"
-        echo "4) 更换 RPC"
+        echo "4) 重启节点（与更换rpc通用）"
         echo "5) 退出"
 
         read -p "请输入选项 (1, 2, 3, 4, 5): " choice
