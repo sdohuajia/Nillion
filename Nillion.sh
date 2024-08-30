@@ -176,6 +176,9 @@ function install_node() {
         echo "节点未同步。脚本将退出。"
         exit 1
     fi
+    
+    # 等待用户按任意键以返回主菜单
+    read -p "按任意键返回主菜单..."
 }
 
 # 查询日志函数
