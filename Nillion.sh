@@ -192,7 +192,6 @@ function query_logs() {
     docker logs -f nillion_verifier --tail 100
 }
 
-
 # 删除节点函数
 function delete_node() {
     echo "正在停止并删除 Docker 容器 nillion_verifier..."
