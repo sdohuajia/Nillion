@@ -236,6 +236,7 @@ function change_rpc() {
     docker run -d --name nillion_verifier -v ~/nillion/accuser:/var/tmp nillion/retailtoken-accuser:v1.0.0 accuse --rpc-endpoint "$new_rpc_url" --block-start "$start_block"
 
     echo "节点已更新到新的 RPC。"
+    sleep 30
 }
 
 # 查看 credentials.json 文件中的信息
