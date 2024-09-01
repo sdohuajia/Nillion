@@ -21,7 +21,7 @@ function main_menu() {
         echo "退出脚本，请按键盘ctrl c退出即可"
         echo "请选择要执行的操作:"
         echo "1) 安装节点"
-        echo "2) 查询日志"
+        echo "2) 查询日志（如rpc错误则不会显示）"
         echo "3) 删除节点"
         echo "4) 重启节点（与更换rpc通用）"
         echo "5) 查看 public_key 和 account_id"
@@ -190,7 +190,6 @@ function query_logs() {
     # 查看 Docker 容器日志
     echo "正在查询 Docker 容器日志..."
     docker logs -f nillion_verifier --tail 100
-    sleep 30
 }
 
 # 删除节点函数
