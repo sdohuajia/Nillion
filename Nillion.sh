@@ -138,15 +138,12 @@ function install_node() {
     case $option in
         1)
             selected_rpc_url="https://testnet-nillion-rpc.lavenderfive.com"
-            other_rpc_urls=("https://nillion-testnet-rpc.polkachu.com" "https://51.89.195.146:26657")
             ;;
         2)
             selected_rpc_url="https://nillion-testnet-rpc.polkachu.com"
-            other_rpc_urls=("https://testnet-nillion-rpc.lavenderfive.com" "https://51.89.195.146:26657")
             ;;
         3)
             selected_rpc_url="https://51.89.195.146:26657"
-            other_rpc_urls=("https://testnet-nillion-rpc.lavenderfive.com" "https://nillion-testnet-rpc.polkachu.com")
             ;;
         *)
             echo "无效选项。请重新运行脚本并选择有效的选项。"
