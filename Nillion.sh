@@ -169,12 +169,9 @@ function install_node() {
     read -p "节点是否已同步？（已同步请输入 'yes'，未同步请输入 'no'）： " sync_status
 
     if [ "$sync_status" = "yes" ]; then
-        # 从剩余的两个 RPC 链接中随机选择一个
-        selected_other_rpc_url=${other_rpc_urls[$RANDOM % ${#other_rpc_urls[@]}]}
-
         # 运行节点
         echo "正在运行节点..."
-        docker run -d --name nillion_verifier -v ~/nillion/accuser:/var/tmp nillion/retailtoken-accuser:v1.0.0 accuse --rpc-endpoint "$selected_other_rpc_url" --block-start "$start_block"
+        docker run -d --name nillion_verifier -v ~/nillion/accuser:/var/tmp nillion/retailtoken-accuser:v1.0.0 accuse --rpc-endpoint "$selected_rpc_url" --block-start "$start_block"
         echo "节点正在运行。"
     else
         echo "节点未同步。脚本将退出。"
