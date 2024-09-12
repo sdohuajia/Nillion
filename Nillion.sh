@@ -13,21 +13,22 @@ fi
 function main_menu() {
     while true; do
         clear
-        echo "脚本由推特 @ferdie_jhovie，免费开源，请勿相信收费"
+        echo "脚本由推特 @ferdie_jhovie 提供，免费开源，请勿相信收费"
         echo "================================================================"
         echo "节点社区 Telegram 群组: https://t.me/niuwuriji"
         echo "节点社区 Telegram 频道: https://t.me/niuwuriji"
         echo "节点社区 Discord 社群: https://discord.gg/GbMV5EcNWF"
-        echo "退出脚本，请按键盘ctrl c退出即可"
+        echo "退出脚本，请按键盘 ctrl+c 退出"
         echo "请选择要执行的操作:"
         echo "1) 安装节点"
-        echo "2) 查询日志（如rpc错误则不会显示）"
+        echo "2) 查询日志（如 rpc 错误则不会显示）"
         echo "3) 删除节点"
-        echo "4) 重启节点（与更换rpc通用）"
+        echo "4) 更换 RPC 并重启节点"
         echo "5) 查看 public_key 和 account_id"
-        echo "6) 退出"
+        echo "6) 更新节点脚本"
+        echo "7) 退出"
 
-        read -p "请输入选项 (1, 2, 3, 4, 5, 6): " choice
+        read -p "请输入选项 (1, 2, 3, 4, 5, 6, 7): " choice
 
         case $choice in
             1)
@@ -46,11 +47,14 @@ function main_menu() {
                 view_credentials
                 ;;
             6)
+                update_script
+                ;;
+            7)
                 echo "退出脚本。"
                 exit 0
                 ;;
             *)
-                echo "无效选项，请输入 1、2、3、4、5 或 6。"
+                echo "无效选项，请输入 1、2、3、4、5、6 或 7。"
                 ;;
         esac
     done
@@ -59,46 +63,43 @@ function main_menu() {
 # 安装节点函数
 function install_node() {
     # 检查是否有 Docker 已安装
-    if command -v docker &> /dev/null
-    then
+    if command -v docker &> /dev/null; then
         echo "Docker 已安装。"
     else
         echo "Docker 未安装，正在进行安装..."
 
         # 更新软件包列表
-        sudo apt-get update
+        apt-get update
 
         # 安装必要的软件包以允许 apt 使用存储库通过 HTTPS
-        sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
+        apt-get install -y apt-transport-https ca-certificates curl software-properties-common
 
         # 添加 Docker 官方 GPG 密钥
-        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
 
         # 添加 Docker 存储库
-        sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+        add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 
         # 更新软件包列表
-        sudo apt-get update
+        apt-get update
 
         # 安装 Docker
-        sudo apt-get install -y docker-ce
+        apt-get install -y docker-ce
 
         # 启动并启用 Docker 服务
-        sudo systemctl start docker
-        sudo systemctl enable docker
+        systemctl start docker
+        systemctl enable docker
 
         echo "Docker 安装完成。"
     fi
 
     # 拉取指定的 Docker 镜像
     echo "正在拉取镜像 nillion/retailtoken-accuser:v1.0.0..."
-    sudo docker pull nillion/retailtoken-accuser:v1.0.0
-
-    echo "镜像拉取完成。"
+    docker pull nillion/retailtoken-accuser:v1.0.0
 
     # 安装 jq
     echo "正在安装 jq..."
-    sudo apt-get install -y jq
+    apt-get install -y jq
 
     echo "jq 安装完成。"
 
@@ -109,7 +110,7 @@ function install_node() {
     mkdir -p ~/nillion/accuser
 
     # 运行 Docker 容器进行初始化
-    sudo docker run -v ~/nillion/accuser:/var/tmp nillion/retailtoken-accuser:v1.0.0 initialise
+    docker run -v ~/nillion/accuser:/var/tmp nillion/retailtoken-accuser:v1.0.0 initialise
 
     echo "初始化完成。"
 
@@ -234,29 +235,73 @@ function change_rpc() {
     read -p "按任意键继续返回主菜单..."
 }
 
-# 查看 credentials.json 文件中的信息
-function view_credentials() {
-    # 定义 JSON 文件路径
-    credentials_file="$HOME/nillion/accuser/credentials.json"
+# 更新脚本函数
+function update_script() {
+    # 提供 RPC 链接选择
+    echo "请选择一个新的 RPC 链接："
+    echo "1) https://testnet-nillion-rpc.lavenderfive.com"
+    echo "2) https://nillion-testnet-rpc.polkachu.com"
+    echo "3) https://51.89.195.146:26657"
 
-    echo "正在读取 credentials.json 文件中的内容..."
+    read -p "请输入选项 (1, 2, 3): " option
 
-    # 确保文件存在
-    if [ -f "$credentials_file" ]; then
-        # 提取并显示 pub_key 和 address
-        echo "address:"
-        jq -r '.address // "未找到 address"' "$credentials_file"
-        echo
-        echo "pub_key:"
-        jq -r '.pub_key // "未找到 public_key"' "$credentials_file"
-        echo
-    else
-        echo "未找到 credentials.json 文件。请确保节点已正确安装并初始化。"
-    fi
+    case $option in
+        1)
+            selected_rpc_url="https://testnet-nillion-rpc.lavenderfive.com"
+            ;;
+        2)
+            selected_rpc_url="https://nillion-testnet-rpc.polkachu.com"
+            ;;
+        3)
+            selected_rpc_url="https://51.89.195.146:26657"
+            ;;
+        *)
+            echo "无效选项。请重新运行脚本并选择有效的选项。"
+            exit 1
+            ;;
+    esac
 
-    # 等待用户按任意键以返回主菜单
+    read -p "请输入当前高度低10000的区块高度： " start_block
+
+    echo "正在停止并删除 Docker 容器 nillion_verifier..."
+    docker stop nillion_verifier
+    docker rm nillion_verifier
+
+    echo "正在拉取新的 Docker 镜像 nillion/retailtoken-accuser:v1.0.1..."
+    docker pull nillion/retailtoken-accuser:v1.0.1
+
+    echo "正在运行新的 Docker 容器..."
+    docker run -d --name nillion_verifier -v ~/nillion/accuser:/var/tmp nillion/retailtoken-accuser:v1.0.1 accuse --rpc-endpoint "$selected_rpc_url" --block-start "$start_block"
+
+    echo "节点已更新并重新运行。"
+    
+    # 等待用户按任意键返回主菜单
     read -p "按任意键返回主菜单..."
 }
 
-# 启动主菜单
+# 查看凭据函数
+function view_credentials() {
+    echo "查看凭据（public_key 和 account_id）"
+    echo "public_key 和 account_id 文件在 ~/nillion/accuser 目录中。"
+    echo "以下是这些文件的内容："
+
+    if [ -f ~/nillion/accuser/public_key ]; then
+        echo "public_key 文件内容："
+        cat ~/nillion/accuser/public_key
+    else
+        echo "public_key 文件不存在。"
+    fi
+
+    if [ -f ~/nillion/accuser/account_id ]; then
+        echo "account_id 文件内容："
+        cat ~/nillion/accuser/account_id
+    else
+        echo "account_id 文件不存在。"
+    fi
+
+    # 等待用户按任意键返回主菜单
+    read -p "按任意键返回主菜单..."
+}
+
+# 执行主菜单
 main_menu
