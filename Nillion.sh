@@ -285,18 +285,20 @@ function view_credentials() {
     echo "pub_key 和 address 文件在 /root/nillion/accuser/credentials.json 目录中。"
     echo "以下是这些文件的内容："
 
-    if [ -f /root/nillion/accuser/credentials.json/pub_key ]; then
-        echo "pub_key 文件内容："
-        cat /root/nillion/accuser/credentials.json/pub_key
-    else
-        echo "pub_key 文件不存在。"
-    fi
+    # JSON 文件路径
+    JSON_FILE="/root/nillion/accuser/credentials.json"
 
-    if [ -f /root/nillion/accuser/credentials.json/address ]; then
+    if [ -f "$JSON_FILE" ]; then
+        echo "文件存在，内容如下："
+        cat "$JSON_FILE"
+
+        echo "pub_key 文件内容："
+        jq -r '.pub_key' "$JSON_FILE"
+        
         echo "address 文件内容："
-        cat /root/nillion/accuser/credentials.json/address
+        jq -r '.address' "$JSON_FILE"
     else
-        echo "address 文件不存在。"
+        echo "$JSON_FILE 文件不存在。"
     fi
 
     # 等待用户按任意键返回主菜单
