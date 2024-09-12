@@ -289,14 +289,13 @@ function view_credentials() {
     JSON_FILE="/root/nillion/accuser/credentials.json"
 
     if [ -f "$JSON_FILE" ]; then
-        echo "文件存在，内容如下："
-        cat "$JSON_FILE"
-
+        # 使用 grep 和 sed 提取 pub_key
         echo "pub_key 文件内容："
-        jq -r '.pub_key' "$JSON_FILE"
-        
+        grep '"pub_key":' "$JSON_FILE" | sed 's/.*"pub_key": "\(.*\)".*/\1/'
+
+        # 使用 grep 和 sed 提取 address
         echo "address 文件内容："
-        jq -r '.address' "$JSON_FILE"
+        grep '"address":' "$JSON_FILE" | sed 's/.*"address": "\(.*\)".*/\1/'
     else
         echo "$JSON_FILE 文件不存在。"
     fi
