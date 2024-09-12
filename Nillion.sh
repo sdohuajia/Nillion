@@ -281,22 +281,22 @@ function update_script() {
 
 # 查看凭据函数
 function view_credentials() {
-    echo "查看凭据（public_key 和 account_id）"
-    echo "public_key 和 account_id 文件在 ~/nillion/accuser 目录中。"
+    echo "查看凭据（pub_key 和 address）"
+    echo "pub_key 和 address 文件在 /root/nillion/accuser/credentials.json 目录中。"
     echo "以下是这些文件的内容："
 
-    if [ -f ~/nillion/accuser/public_key ]; then
-        echo "public_key 文件内容："
-        cat ~/nillion/accuser/public_key
+    if [ -f /root/nillion/accuser/credentials.json/pub_key ]; then
+        echo "pub_key 文件内容："
+        cat /root/nillion/accuser/credentials.json/pub_key
     else
-        echo "public_key 文件不存在。"
+        echo "pub_key 文件不存在。"
     fi
 
-    if [ -f ~/nillion/accuser/account_id ]; then
-        echo "account_id 文件内容："
-        cat ~/nillion/accuser/account_id
+    if [ -f /root/nillion/accuser/credentials.json/address ]; then
+        echo "address 文件内容："
+        cat /root/nillion/accuser/credentials.json/address
     else
-        echo "account_id 文件不存在。"
+        echo "address 文件不存在。"
     fi
 
     # 等待用户按任意键返回主菜单
