@@ -94,7 +94,7 @@ function install_node() {
     fi
 
     # 拉取指定的 Docker 镜像
-    echo "正在拉取镜像 nillion/retailtoken-accuser:v1.0.0..."
+    echo "正在拉取镜像 nillion/retailtoken-accuser:v1.0.1..."
     docker pull nillion/retailtoken-accuser:v1.0.1
 
     # 安装 jq
