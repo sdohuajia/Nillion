@@ -95,7 +95,7 @@ function install_node() {
 
     # 拉取指定的 Docker 镜像
     echo "正在拉取镜像 nillion/retailtoken-accuser:v1.0.0..."
-    docker pull nillion/retailtoken-accuser:v1.0.0
+    docker pull nillion/retailtoken-accuser:v1.0.1
 
     # 安装 jq
     echo "正在安装 jq..."
@@ -110,7 +110,7 @@ function install_node() {
     mkdir -p ~/nillion/accuser
 
     # 运行 Docker 容器进行初始化
-    docker run -v ~/nillion/accuser:/var/tmp nillion/retailtoken-accuser:v1.0.0 initialise
+    docker run -v ~/nillion/accuser:/var/tmp nillion/retailtoken-accuser:v1.0.1 initialise
 
     echo "初始化完成。"
 
@@ -169,7 +169,7 @@ function install_node() {
     if [ "$sync_status" = "yes" ]; then
         # 运行节点
         echo "正在运行节点..."
-        docker run -d --name nillion_verifier -v ~/nillion/accuser:/var/tmp nillion/retailtoken-accuser:v1.0.0 accuse --rpc-endpoint "$selected_rpc_url" --block-start "$start_block"
+        docker run -d --name nillion_verifier -v ~/nillion/accuser:/var/tmp nillion/retailtoken-accuser:v1.0.1 accuse --rpc-endpoint "$selected_rpc_url" --block-start "$start_block"
         echo "节点正在运行。"
     else
         echo "节点未同步。脚本将退出。"
@@ -227,7 +227,7 @@ function change_rpc() {
     docker rm nillion_verifier
 
     echo "正在运行新的 Docker 容器..."
-    docker run -d --name nillion_verifier -v ~/nillion/accuser:/var/tmp nillion/retailtoken-accuser:v1.0.0 accuse --rpc-endpoint "$new_rpc_url" --block-start "$start_block"
+    docker run -d --name nillion_verifier -v ~/nillion/accuser:/var/tmp nillion/retailtoken-accuser:v1.0.1 accuse --rpc-endpoint "$selected_rpc_url" --block-start "$start_block"
 
     echo "节点已更新到新的 RPC。"
     
