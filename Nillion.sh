@@ -193,6 +193,9 @@ function delete_node() {
     docker stop nillion_verifier
     docker rm nillion_verifier
     echo "节点已删除。"
+
+    # 等待用户按任意键以返回主菜单
+    read -p "按任意键返回主菜单..."
 }
 
 # 更换 RPC 函数
