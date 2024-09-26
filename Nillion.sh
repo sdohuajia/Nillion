@@ -21,12 +21,12 @@ function main_menu() {
         echo "退出脚本，请按键盘 ctrl+c 退出"
         echo "请选择要执行的操作:"
         echo "1) 安装节点"
-        echo "2) 查询日志（迁移后暂不可用）"
+        echo "2) 查询日志"
         echo "3) 删除节点"
         echo "4) 更换 RPC 并重启节点"
         echo "5) 查看 public_key 和 account_id"
         echo "6) 更新节点脚本"
-        echo "7) 迁移验证者"
+        echo "7) 迁移验证者（9.24前的用户可用）"
         echo "8) 退出"
 
         read -p "请输入选项 (1, 2, 3, 4, 5, 6, 7, 8): " choice
