@@ -89,8 +89,8 @@ function install_node() {
     fi
 
     # 拉取指定的 Docker 镜像
-    echo "正在拉取镜像 nillion/retailtoken-accuser:v1.0.1..."
-    docker pull nillion/retailtoken-accuser:v1.0.1
+    echo "正在拉取镜像 nillion/verifier:v1.0.1..."
+    docker pull nillion/verifier:v1.0.1
 
     # 安装 jq
     echo "正在安装 jq..."
@@ -105,7 +105,7 @@ function install_node() {
     mkdir -p ~/nillion/accuser
 
     # 运行 Docker 容器进行初始化
-    docker run -v ./nillion/accuser:/var/tmp nillion/retailtoken-accuser:v1.0.1 initialise
+    docker run -v ./nillion/accuser:/var/tmp nillion/verifier:v1.0.1 initialise
 
     echo "初始化完成。"
 
@@ -127,9 +127,8 @@ function install_node() {
     echo "请选择一个 RPC 链接进行同步信息查询："
     echo "1) https://testnet-nillion-rpc.lavenderfive.com"
     echo "2) https://nillion-testnet-rpc.polkachu.com"
-    echo "3) https://51.89.195.146:26657"
 
-    read -p "请输入选项 (1, 2, 3): " option
+    read -p "请输入选项 (1, 2): " option
 
     case $option in
         1)
@@ -137,9 +136,6 @@ function install_node() {
             ;;
         2)
             selected_rpc_url="https://nillion-testnet-rpc.polkachu.com"
-            ;;
-        3)
-            selected_rpc_url="https://51.89.195.146:26657"
             ;;
         *)
             echo "无效选项。请重新运行脚本并选择有效的选项。"
@@ -164,7 +160,7 @@ function install_node() {
     if [ "$sync_status" = "yes" ]; then
         # 运行节点
         echo "正在运行节点..."
-        docker run -d --name nillion_verifier -v ~/nillion/accuser:/var/tmp nillion/retailtoken-accuser:v1.0.1 accuse --rpc-endpoint "$selected_rpc_url" --block-start "$start_block"
+        docker run -d --name nillion_verifier -v ~/nillion/accuser:/var/tmp nillion/verifier:v1.0.1 accuse --rpc-endpoint "$selected_rpc_url" --block-start "$start_block"
         echo "节点正在运行。"
     else
         echo "节点未同步。脚本将退出。"
@@ -198,9 +194,8 @@ function change_rpc() {
     echo "请选择一个新的 RPC 链接："
     echo "1) https://testnet-nillion-rpc.lavenderfive.com"
     echo "2) https://nillion-testnet-rpc.polkachu.com"
-    echo "3) https://51.89.195.146:26657"
 
-    read -p "请输入选项 (1, 2, 3): " option
+    read -p "请输入选项 (1, 2): " option
 
     case $option in
         1)
@@ -208,9 +203,6 @@ function change_rpc() {
             ;;
         2)
             new_rpc_url="https://nillion-testnet-rpc.polkachu.com"
-            ;;
-        3)
-            new_rpc_url="https://51.89.195.146:26657"
             ;;
         *)
             echo "无效选项。请重新运行脚本并选择有效的选项。"
@@ -225,7 +217,7 @@ function change_rpc() {
     docker rm nillion_verifier
 
     echo "正在运行新的 Docker 容器..."
-    docker run -d --name nillion_verifier -v ~/nillion/accuser:/var/tmp nillion/retailtoken-accuser:v1.0.1 accuse --rpc-endpoint "$selected_rpc_url" --block-start "$start_block"
+    docker run -d --name nillion_verifier -v ~/nillion/accuser:/var/tmp nillion/verifier:v1.0.1 accuse --rpc-endpoint "$new_rpc_url" --block-start "$start_block"
 
     echo "节点已更新到新的 RPC。"
     
@@ -239,9 +231,8 @@ function update_script() {
     echo "请选择一个新的 RPC 链接："
     echo "1) https://testnet-nillion-rpc.lavenderfive.com"
     echo "2) https://nillion-testnet-rpc.polkachu.com"
-    echo "3) https://51.89.195.146:26657"
 
-    read -p "请输入选项 (1, 2, 3): " option
+    read -p "请输入选项 (1, 2): " option
 
     case $option in
         1)
@@ -250,57 +241,32 @@ function update_script() {
         2)
             selected_rpc_url="https://nillion-testnet-rpc.polkachu.com"
             ;;
-        3)
-            selected_rpc_url="https://51.89.195.146:26657"
-            ;;
         *)
             echo "无效选项。请重新运行脚本并选择有效的选项。"
             exit 1
             ;;
     esac
 
-    read -p "请输入当前高度低10000的区块高度： " start_block
+    # 拉取镜像
+    echo "正在拉取镜像 nillion/verifier:v1.0.1..."
+    docker pull nillion/verifier:v1.0.1
 
-    echo "正在停止并删除 Docker 容器 nillion_verifier..."
-    docker stop nillion_verifier
-    docker rm nillion_verifier
+    echo "更新完成。"
 
-    echo "正在拉取新的 Docker 镜像 nillion/retailtoken-accuser:v1.0.1..."
-    docker pull nillion/retailtoken-accuser:v1.0.1
-
-    echo "正在运行新的 Docker 容器..."
-    docker run -d --name nillion_verifier -v ~/nillion/accuser:/var/tmp nillion/retailtoken-accuser:v1.0.1 accuse --rpc-endpoint "$selected_rpc_url" --block-start "$start_block"
-
-    echo "节点已更新并重新运行。"
-    
     # 等待用户按任意键返回主菜单
     read -p "按任意键返回主菜单..."
 }
 
-# 查看凭据函数
+# 查看凭证函数
 function view_credentials() {
-    echo "查看凭据（pub_key 和 address）"
-    echo "pub_key 和 address 文件在 /root/nillion/accuser/credentials.json 目录中。"
-    echo "以下是这些文件的内容："
-
-    # JSON 文件路径
-    JSON_FILE="/root/nillion/accuser/credentials.json"
-
-    if [ -f "$JSON_FILE" ]; then
-        # 使用 grep 和 sed 提取 pub_key
-        echo "pub_key 文件内容："
-        grep '"pub_key":' "$JSON_FILE" | sed 's/.*"pub_key": "\(.*\)".*/\1/'
-
-        # 使用 grep 和 sed 提取 address
-        echo "address 文件内容："
-        grep '"address":' "$JSON_FILE" | sed 's/.*"address": "\(.*\)".*/\1/'
-    else
-        echo "$JSON_FILE 文件不存在。"
-    fi
+    echo "account_id 和 public_key 已保存到 ~/nillion/accuser 目录中的相关文件中。"
+    echo "你可以使用以下命令查看保存的文件内容："
+    echo "cat ~/nillion/accuser/account_id"
+    echo "cat ~/nillion/accuser/public_key"
 
     # 等待用户按任意键返回主菜单
     read -p "按任意键返回主菜单..."
 }
 
-# 执行主菜单
+# 启动主菜单
 main_menu
