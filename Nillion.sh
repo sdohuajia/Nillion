@@ -95,18 +95,12 @@ function install_node() {
     # 安装 jq
     echo "正在安装 jq..."
     apt-get install -y jq
-
     echo "jq 安装完成。"
 
     # 初始化目录和运行 Docker 容器
     echo "正在初始化配置..."
-
-    # 创建目录
     mkdir -p ~/nillion/accuser
-
-    # 运行 Docker 容器进行初始化
     docker run -v ./nillion/accuser:/var/tmp nillion/verifier:v1.0.1 initialise
-
     echo "初始化完成。"
 
     # 提示用户保存重要信息
@@ -140,7 +134,7 @@ function install_node() {
     if [ "$sync_status" = "yes" ]; then
         # 运行节点
         echo "正在运行节点..."
-        docker run -v ./nillion/verifier:/var/tmp nillion/verifier:v1.0.1 verify --rpc-endpoint "$selected_rpc_url" 
+        docker run -v ./nillion/verifier:/var/tmp nillion/verifier:v1.0.1 verify --rpc-endpoint "https://testnet-nillion-rpc.lavenderfive.com"
         echo "节点正在运行。"
     else
         echo "节点未同步。脚本将退出。"
@@ -155,16 +149,7 @@ function install_node() {
 function query_logs() {
     # 查看 Docker 容器日志
     echo "正在查询 Docker 容器日志..."
-    
-    # 检查容器是否存在
-    if [ "$(docker ps -q -f name=nillion_verifier)" ]; then
-        docker logs -f nillion_verifier --tail 100
-    else
-        echo "容器 nillion_verifier 不存在或未运行。"
-    fi
-
-    # 等待用户按任意键以返回主菜单
-    read -p "按任意键返回主菜单..."
+    docker logs -f nillion_verifier --tail 100
 }
 
 # 删除节点函数
@@ -183,14 +168,12 @@ function change_rpc() {
     # 直接使用固定的 RPC 链接
     new_rpc_url="https://testnet-nillion-rpc.lavenderfive.com"
 
-    read -p "请输入网页上显示的开始区块： " start_block
-
     echo "正在停止并删除现有 Docker 容器 nillion_verifier..."
     docker stop nillion_verifier
     docker rm nillion_verifier
 
     echo "正在运行新的 Docker 容器..."
-    docker run -v ./nillion/verifier:/var/tmp nillion/verifier:v1.0.1 verify --rpc-endpoint "$new_rpc_url" 
+    docker run -v ./nillion/verifier:/var/tmp nillion/verifier:v1.0.1 verify --rpc-endpoint "$new_rpc_url"
 
     echo "节点已更新到新的 RPC。"
     
