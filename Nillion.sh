@@ -99,7 +99,7 @@ function install_node() {
 
     # 初始化目录和运行 Docker 容器
     echo "正在初始化配置..."
-    mkdir -p ~/nillion/accuser
+    mkdir -p nillion/verifier
     docker run -v ./nillion/verifier:/var/tmp nillion/verifier:v1.0.1 initialise
     echo "初始化完成。"
 
@@ -163,6 +163,10 @@ function query_logs() {
 
 # 删除节点函数
 function delete_node() {
+    echo "正在备份 /root/nillion/verifier 目录..."
+    tar -czf /root/nillion/verifier_backup_$(date +%F).tar.gz /root/nillion/verifier
+    echo "备份完成。"
+
     echo "正在停止并删除 Docker 容器 nillion_verifier..."
     docker stop nillion_verifier
     docker rm nillion_verifier
