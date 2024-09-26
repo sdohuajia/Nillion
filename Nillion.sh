@@ -72,7 +72,9 @@ function migrate_validator() {
 
     echo "正在迁移验证者..."
     docker run -v ./nillion/accuser:/var/tmp nillion/verifier:v1.0.1 verify --rpc-endpoint "https://testnet-nillion-rpc.lavenderfive.com"
-    
+
+}
+
 # 安装节点函数
 function install_node() {
     # 检查是否有 Docker 已安装
