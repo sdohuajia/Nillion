@@ -149,7 +149,16 @@ function install_node() {
 function query_logs() {
     # 查看 Docker 容器日志
     echo "正在查询 Docker 容器日志..."
-    docker logs -f nillion_verifier --tail 100
+    
+    # 检查容器是否存在
+    if [ "$(docker ps -q -f name=nillion_verifier)" ]; then
+        docker logs -f nillion_verifier --tail 100
+    else
+        echo "容器 nillion_verifier 不存在或未运行。"
+    fi
+
+    # 等待用户按任意键以返回主菜单
+    read -p "按任意键返回主菜单..."
 }
 
 # 删除节点函数
