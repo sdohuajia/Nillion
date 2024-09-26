@@ -123,25 +123,8 @@ function install_node() {
     # 等待用户按任意键继续
     read -p "按任意键继续进行下一步..."
 
-    # 提供 RPC 链接选择
-    echo "请选择一个 RPC 链接进行同步信息查询："
-    echo "1) https://testnet-nillion-rpc.lavenderfive.com"
-    echo "2) https://nillion-testnet-rpc.polkachu.com"
-
-    read -p "请输入选项 (1, 2): " option
-
-    case $option in
-        1)
-            selected_rpc_url="https://testnet-nillion-rpc.lavenderfive.com"
-            ;;
-        2)
-            selected_rpc_url="https://nillion-testnet-rpc.polkachu.com"
-            ;;
-        *)
-            echo "无效选项。请重新运行脚本并选择有效的选项。"
-            exit 1
-            ;;
-    esac
+    # 使用固定的 RPC 链接
+    selected_rpc_url="https://testnet-nillion-rpc.lavenderfive.com"
 
     # 查询同步信息
     echo "正在从 $selected_rpc_url 查询同步信息..."
@@ -151,16 +134,13 @@ function install_node() {
     echo "同步信息："
     echo "$sync_info"
 
-    # 提示用户填写开始区块
-    read -p "请输入网页上显示的开始区块： " start_block
-
     # 提示用户是否继续
     read -p "节点是否已同步？（已同步请输入 'yes'，未同步请输入 'no'）： " sync_status
 
     if [ "$sync_status" = "yes" ]; then
         # 运行节点
         echo "正在运行节点..."
-        docker run -d --name nillion_verifier -v ~/nillion/accuser:/var/tmp nillion/verifier:v1.0.1 accuse --rpc-endpoint "$selected_rpc_url" --block-start "$start_block"
+        docker run -v ./nillion/verifier:/var/tmp nillion/verifier:v1.0.1 verify --rpc-endpoint "$selected_rpc_url" 
         echo "节点正在运行。"
     else
         echo "节点未同步。脚本将退出。"
@@ -175,7 +155,16 @@ function install_node() {
 function query_logs() {
     # 查看 Docker 容器日志
     echo "正在查询 Docker 容器日志..."
-    docker logs -f nillion_verifier --tail 100
+    
+    # 检查容器是否存在
+    if [ "$(docker ps -q -f name=nillion_verifier)" ]; then
+        docker logs -f nillion_verifier --tail 100
+    else
+        echo "容器 nillion_verifier 不存在或未运行。"
+    fi
+
+    # 等待用户按任意键以返回主菜单
+    read -p "按任意键返回主菜单..."
 }
 
 # 删除节点函数
@@ -191,24 +180,8 @@ function delete_node() {
 
 # 更换 RPC 函数
 function change_rpc() {
-    echo "请选择一个新的 RPC 链接："
-    echo "1) https://testnet-nillion-rpc.lavenderfive.com"
-    echo "2) https://nillion-testnet-rpc.polkachu.com"
-
-    read -p "请输入选项 (1, 2): " option
-
-    case $option in
-        1)
-            new_rpc_url="https://testnet-nillion-rpc.lavenderfive.com"
-            ;;
-        2)
-            new_rpc_url="https://nillion-testnet-rpc.polkachu.com"
-            ;;
-        *)
-            echo "无效选项。请重新运行脚本并选择有效的选项。"
-            exit 1
-            ;;
-    esac
+    # 直接使用固定的 RPC 链接
+    new_rpc_url="https://testnet-nillion-rpc.lavenderfive.com"
 
     read -p "请输入网页上显示的开始区块： " start_block
 
@@ -217,7 +190,7 @@ function change_rpc() {
     docker rm nillion_verifier
 
     echo "正在运行新的 Docker 容器..."
-    docker run -d --name nillion_verifier -v ~/nillion/accuser:/var/tmp nillion/verifier:v1.0.1 accuse --rpc-endpoint "$new_rpc_url" --block-start "$start_block"
+    docker run -v ./nillion/verifier:/var/tmp nillion/verifier:v1.0.1 verify --rpc-endpoint "$new_rpc_url" 
 
     echo "节点已更新到新的 RPC。"
     
@@ -227,26 +200,6 @@ function change_rpc() {
 
 # 更新脚本函数
 function update_script() {
-    # 提供 RPC 链接选择
-    echo "请选择一个新的 RPC 链接："
-    echo "1) https://testnet-nillion-rpc.lavenderfive.com"
-    echo "2) https://nillion-testnet-rpc.polkachu.com"
-
-    read -p "请输入选项 (1, 2): " option
-
-    case $option in
-        1)
-            selected_rpc_url="https://testnet-nillion-rpc.lavenderfive.com"
-            ;;
-        2)
-            selected_rpc_url="https://nillion-testnet-rpc.polkachu.com"
-            ;;
-        *)
-            echo "无效选项。请重新运行脚本并选择有效的选项。"
-            exit 1
-            ;;
-    esac
-
     # 拉取镜像
     echo "正在拉取镜像 nillion/verifier:v1.0.1..."
     docker pull nillion/verifier:v1.0.1
