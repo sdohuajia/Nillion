@@ -148,13 +148,13 @@ function install_node() {
 # 查询日志函数
 function query_logs() {
     # 查看 Docker 容器日志
-    echo "正在查询 Docker 容器日志..."
-    
+    echo "正在查询 nillion/verifier:v1.0.1 的日志..."
+
     # 检查容器是否存在
-    if [ "$(docker ps -q -f name=nillion_verifier)" ]; then
-        docker logs -f nillion_verifier --tail 100
+    if [ "$(docker ps -q -f ancestor=nillion/verifier:v1.0.1)" ]; then
+        docker logs -f "$(docker ps -q -f ancestor=nillion/verifier:v1.0.1)" --tail 100
     else
-        echo "容器 nillion_verifier 不存在或未运行。"
+        echo "没有运行的 nillion/verifier:v1.0.1 容器。"
     fi
 
     # 等待用户按任意键以返回主菜单
