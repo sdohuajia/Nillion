@@ -26,40 +26,21 @@ function main_menu() {
         echo "4) 更换 RPC 并重启节点"
         echo "5) 查看 public_key 和 account_id"
         echo "6) 更新节点脚本"
-        echo "7) 迁移验证者"  # 新增选项
+        echo "7) 迁移验证者"
         echo "8) 退出"
 
         read -p "请输入选项 (1, 2, 3, 4, 5, 6, 7, 8): " choice
 
         case $choice in
-            1)
-                install_node
-                ;;
-            2)
-                query_logs
-                ;;
-            3)
-                delete_node
-                ;;
-            4)
-                change_rpc
-                ;;
-            5)
-                view_credentials
-                ;;
-            6)
-                update_script
-                ;; 
-            7)
-                migrate_validator
-                ;; 
-            8)
-                echo "退出脚本。"
-                exit 0
-                ;;
-            *)
-                echo "无效选项，请输入 1、2、3、4、5、6、7或8。"
-                ;;
+            1) install_node ;;
+            2) query_logs ;;
+            3) delete_node ;;
+            4) change_rpc ;;
+            5) view_credentials ;;
+            6) update_script ;;
+            7) migrate_validator ;;
+            8) echo "退出脚本。"; exit 0 ;;
+            *) echo "无效选项，请输入 1、2、3、4、5、6、7或8。" ;;
         esac
     done
 }
@@ -72,7 +53,6 @@ function migrate_validator() {
 
     echo "正在迁移验证者..."
     docker run -v ./nillion/accuser:/var/tmp nillion/verifier:v1.0.1 verify --rpc-endpoint "https://testnet-nillion-rpc.lavenderfive.com"
-
 }
 
 # 安装节点函数
