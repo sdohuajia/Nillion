@@ -100,7 +100,7 @@ function install_node() {
     # 初始化目录和运行 Docker 容器
     echo "正在初始化配置..."
     mkdir -p ~/nillion/accuser
-    docker run -v ./nillion/accuser:/var/tmp nillion/verifier:v1.0.1 initialise
+    docker run -v ./nillion/verifier:/var/tmp nillion/verifier:v1.0.1 initialise
     echo "初始化完成。"
 
     # 提示用户保存重要信息
