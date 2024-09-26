@@ -21,7 +21,7 @@ function main_menu() {
         echo "退出脚本，请按键盘 ctrl+c 退出"
         echo "请选择要执行的操作:"
         echo "1) 安装节点"
-        echo "2) 查询日志（如 rpc 错误则不会显示）"
+        echo "2) 查询日志（迁移后暂不可用）"
         echo "3) 删除节点"
         echo "4) 更换 RPC 并重启节点"
         echo "5) 查看 public_key 和 account_id"
