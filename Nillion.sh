@@ -105,12 +105,12 @@ function install_node() {
 
     # 提示用户保存重要信息
     echo "初始化完成。请查看以下文件以获取重要信息："
-    echo "account_id 和 public_key 已保存到 ~/nillion/accuser 目录中的相关文件中。"
+    echo "account_id 和 public_key 已保存到 ~/nillion/verifier 目录中的相关文件中。"
     echo "请务必保存这些信息，因为它们在后续操作中非常重要。"
 
     echo "你可以使用以下命令查看保存的文件内容："
-    echo "cat ~/nillion/accuser/account_id"
-    echo "cat ~/nillion/accuser/public_key"
+    echo "cat ~/nillion/verifier/account_id"
+    echo "cat ~/nillion/verifier/public_key"
 
     echo "记得妥善保存这些信息，并避免泄露。"
 
