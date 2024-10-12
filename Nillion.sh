@@ -52,7 +52,7 @@ function migrate_validator() {
     docker rm nillion_verifier
 
     echo "正在迁移验证者..."
-    docker run -v ./nillion/accuser:/var/tmp nillion/verifier:v1.0.1 verify --rpc-endpoint "https://testnet-nillion-rpc.lavenderfive.com"
+    docker run -v ./nillion/accuser:/var/tmp nillion/verifier:v1.0.1 verify --rpc-endpoint "https://nillion-testnet-rpc.polkachu.com"
 }
 
 # 安装节点函数
@@ -118,7 +118,7 @@ function install_node() {
     read -p "按任意键继续进行下一步..."
 
     # 使用固定的 RPC 链接
-    selected_rpc_url="https://testnet-nillion-rpc.lavenderfive.com"
+    selected_rpc_url="https://nillion-testnet-rpc.polkachu.com"
 
     # 查询同步信息
     echo "正在从 $selected_rpc_url 查询同步信息..."
@@ -134,7 +134,7 @@ function install_node() {
     if [ "$sync_status" = "yes" ]; then
         # 运行节点
         echo "正在运行节点..."
-        docker run -v ./nillion/verifier:/var/tmp nillion/verifier:v1.0.1 verify --rpc-endpoint "https://testnet-nillion-rpc.lavenderfive.com"
+        docker run -v ./nillion/verifier:/var/tmp nillion/verifier:v1.0.1 verify --rpc-endpoint "https://nillion-testnet-rpc.polkachu.com"
         echo "节点正在运行。"
     else
         echo "节点未同步。脚本将退出。"
@@ -179,7 +179,7 @@ function delete_node() {
 # 更换 RPC 函数
 function change_rpc() {
     # 直接使用固定的 RPC 链接
-    new_rpc_url="https://testnet-nillion-rpc.lavenderfive.com"
+    new_rpc_url="https://nillion-testnet-rpc.polkachu.com"
 
     echo "正在停止并删除现有 Docker 容器 nillion_verifier..."
     docker stop nillion_verifier
