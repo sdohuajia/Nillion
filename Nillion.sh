@@ -178,8 +178,28 @@ function delete_node() {
 
 # 更换 RPC 函数
 function change_rpc() {
-    # 直接使用固定的 RPC 链接
-    new_rpc_url="https://nillion-testnet-rpc.polkachu.com"
+    echo "请选择要使用的 RPC 链接："
+    echo "1) https://testnet-nillion-rpc.lavenderfive.com"
+    echo "2) https://nillion-testnet-rpc.polkachu.com"
+    echo "3) https://nillion-testnet.rpc.kjnodes.com"
+
+    read -p "请输入数字 (1-3): " choice
+
+    case $choice in
+        1)
+            new_rpc_url="https://testnet-nillion-rpc.lavenderfive.com"
+            ;;
+        2)
+            new_rpc_url="https://nillion-testnet-rpc.polkachu.com"
+            ;;
+        3)
+            new_rpc_url="https://nillion-testnet.rpc.kjnodes.com"
+            ;;
+        *)
+            echo "无效的选择，请重试。"
+            return
+            ;;
+    esac
 
     echo "正在停止并删除现有 Docker 容器 nillion_verifier..."
     docker stop nillion_verifier
@@ -188,7 +208,7 @@ function change_rpc() {
     echo "正在运行新的 Docker 容器..."
     docker run -v ./nillion/verifier:/var/tmp nillion/verifier:v1.0.1 verify --rpc-endpoint "$new_rpc_url"
 
-    echo "节点已更新到新的 RPC。"
+    echo "节点已更新到新的 RPC：$new_rpc_url"
     
     # 等待用户按任意键返回主菜单
     read -p "按任意键继续返回主菜单..."
