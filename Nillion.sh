@@ -27,10 +27,9 @@ function main_menu() {
         echo "5) 查看 public_key 和 account_id"
         echo "6) 更新节点脚本"
         echo "7) 迁移验证者（9.24前的用户可用）"
-        echo "8) 查看日志（适合迁移的用户）"
-        echo "9) 退出"
+        echo "8) 退出"
 
-        read -p "请输入选项 (1, 2, 3, 4, 5, 6, 7, 8, 9): " choice
+        read -p "请输入选项 (1, 2, 3, 4, 5, 6, 7, 8): " choice
 
         case $choice in
             1) install_node ;;
@@ -40,21 +39,10 @@ function main_menu() {
             5) view_credentials ;;
             6) update_script ;;
             7) migrate_validator ;;
-            8) view_docker_logs ;;
             9) echo "退出脚本。"; exit 0 ;;
             *) echo "无效选项，请输入 1、2、3、4、5、6、7、8或9。" ;;
         esac
     done
-}
-
-# 查看 Docker 日志函数
-function view_docker_logs() {
-    echo "正在查看 nillion/verifier:v1.0.1 的日志..."
-    cd /root/nillion
-    docker logs --tail 100 nillion/verifier:v1.0.1
-
-    # 等待用户按任意键以返回主菜单
-    read -p "按任意键返回主菜单..."
 }
 
 # 迁移验证者函数
