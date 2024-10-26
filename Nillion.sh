@@ -147,17 +147,17 @@ function install_node() {
 
 # 查询日志函数
 function query_logs() {
-    # 提示用户输入容器名称
-    read -p "请输入要查询日志的容器名称: " container_name
+    # 提示用户输入容器 ID
+    read -p "请输入要查询日志的容器 ID: " container_id
 
     # 查看 Docker 容器日志
-    echo "正在查询 $container_name 容器的日志..."
+    echo "正在查询容器 $container_id 的日志..."
 
     # 检查容器是否存在
-    if [ "$(docker ps -q -f name=$container_name)" ]; then
-        docker logs -f $container_name --tail 100
+    if [ "$(docker ps -q -f id=$container_id)" ]; then
+        docker logs -f $container_id --tail 100
     else
-        echo "没有运行的 $container_name 容器。"
+        echo "没有运行的容器 $container_id。"
     fi
 
     # 等待用户按任意键以返回主菜单
