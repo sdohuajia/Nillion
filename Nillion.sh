@@ -50,6 +50,7 @@ function main_menu() {
 # 查看 Docker 日志函数
 function view_docker_logs() {
     echo "正在查看 nillion/verifier:v1.0.1 的日志..."
+    cd /root/nillion
     docker logs --tail 100 nillion/verifier:v1.0.1
 
     # 等待用户按任意键以返回主菜单
