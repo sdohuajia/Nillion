@@ -21,7 +21,7 @@ function main_menu() {
         echo "退出脚本，请按键盘 ctrl+c 退出"
         echo "请选择要执行的操作:"
         echo "1) 安装节点"
-        echo "2) 查询日志"
+        echo "2) 查询日志（需要先使用docker ps来查看id）"
         echo "3) 删除节点"
         echo "4) 更换 RPC 并重启节点"
         echo "5) 查看 public_key 和 account_id"
@@ -147,14 +147,17 @@ function install_node() {
 
 # 查询日志函数
 function query_logs() {
+    # 提示用户输入容器名称
+    read -p "请输入要查询日志的容器名称: " container_name
+
     # 查看 Docker 容器日志
-    echo "正在查询 nillion_verifier 容器的日志..."
+    echo "正在查询 $container_name 容器的日志..."
 
     # 检查容器是否存在
-    if [ "$(docker ps -q -f name=nillion_verifier)" ]; then
-        docker logs -f nillion_verifier --tail 100
+    if [ "$(docker ps -q -f name=$container_name)" ]; then
+        docker logs -f $container_name --tail 100
     else
-        echo "没有运行的 nillion_verifier 容器。"
+        echo "没有运行的 $container_name 容器。"
     fi
 
     # 等待用户按任意键以返回主菜单
