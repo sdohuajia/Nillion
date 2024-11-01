@@ -50,7 +50,13 @@ function migrate_validator() {
     docker rm nillion_verifier
 
     echo "正在迁移验证者..."
-    docker run -v ./nillion/accuser:/var/tmp nillion/verifier:v1.0.1 verify --rpc-endpoint "https://nillion-testnet-rpc.polkachu.com"
+    
+    # 创建一个新的 screen 会话并在其中运行 Docker 命令
+    screen -S Nillion -dm bash -c "docker run -v ./nillion/accuser:/var/tmp nillion/verifier:v1.0.1 verify --rpc-endpoint 'https://nillion-testnet-rpc.polkachu.com'"
+
+    # 提示用户如何退出和查看 screen 会话
+    echo "验证者已在 screen 会话 'Nillion' 中运行。"
+    echo "使用 Ctrl+A+D 退出 screen 会话，使用 'screen -r Nillion' 查看会话。"
 }
 
 # 安装节点函数
