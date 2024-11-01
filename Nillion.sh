@@ -223,10 +223,12 @@ function change_rpc() {
 
 # 查看凭证函数
 function view_credentials() {
-    echo "account_id 和 public_key 已保存到 ~/nillion/accuser 目录中的相关文件中。"
-    echo "你可以使用以下命令查看保存的文件内容："
-    echo "cat ~/nillion/verifier/account_id"
-    echo "cat ~/nillion/verifier/public_key"
+    echo "凭证信息已保存到 /root/nillion/verifier/credentials.json 文件中。"
+    
+    echo "以下是保存的文件内容："
+    echo "--------------------------"
+    cat /root/nillion/verifier/credentials.json
+    echo "--------------------------"
 
     # 等待用户按任意键返回主菜单
     read -p "按任意键返回主菜单..."
