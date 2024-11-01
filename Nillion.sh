@@ -226,7 +226,8 @@ function view_credentials() {
     echo "凭证信息已保存到 /root/nillion/verifier/credentials.json 文件中。"
     
     echo "以下是保存的文件内容："
-    echo "--------------------------"
+    echo "account_id=address"
+    echo "public_key=pub_key"
     cat /root/nillion/verifier/credentials.json
     echo "--------------------------"
 
