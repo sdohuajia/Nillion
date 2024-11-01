@@ -25,11 +25,10 @@ function main_menu() {
         echo "3) 删除节点"
         echo "4) 更换 RPC 并重启节点"
         echo "5) 查看 public_key 和 account_id"
-        echo "6) 更新节点脚本"
-        echo "7) 迁移验证者（9.24前的用户可用）"
-        echo "8) 退出"
+        echo "6) 迁移验证者（9.24前的用户可用）"
+        echo "7) 退出"
 
-        read -p "请输入选项 (1, 2, 3, 4, 5, 6, 7, 8): " choice
+        read -p "请输入选项 (1, 2, 3, 4, 5, 6, 7): " choice
 
         case $choice in
             1) install_node ;;
@@ -37,9 +36,8 @@ function main_menu() {
             3) delete_node ;;
             4) change_rpc ;;
             5) view_credentials ;;
-            6) update_script ;;
-            7) migrate_validator ;;
-            9) echo "退出脚本。"; exit 0 ;;
+            6) migrate_validator ;;
+            7) echo "退出脚本。"; exit 0 ;;
             *) echo "无效选项，请输入 1、2、3、4、5、6、7、8或9。" ;;
         esac
     done
@@ -215,18 +213,6 @@ function change_rpc() {
     
     # 等待用户按任意键返回主菜单
     read -p "按任意键继续返回主菜单..."
-}
-
-# 更新脚本函数
-function update_script() {
-    # 拉取镜像
-    echo "正在拉取镜像 nillion/verifier:v1.0.1..."
-    docker pull nillion/verifier:v1.0.1
-
-    echo "更新完成。"
-
-    # 等待用户按任意键返回主菜单
-    read -p "按任意键返回主菜单..."
 }
 
 # 查看凭证函数
